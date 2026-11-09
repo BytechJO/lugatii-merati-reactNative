@@ -1,0 +1,632 @@
+[
+  {
+    "key": "accountBackground",
+    "source": "frontend/src/assets/choose_account_type.svg",
+    "output": "assets/design/accountBackground.png"
+  },
+  {
+    "key": "accountTeacher",
+    "source": "frontend/src/assets/teacher ChooseAccountType.png",
+    "output": "assets/design/accountTeacher.png"
+  },
+  {
+    "key": "accountStudent",
+    "source": "frontend/src/assets/student ChooseAccountType.png",
+    "output": "assets/design/accountStudent.png"
+  },
+  {
+    "key": "loginBackground",
+    "source": "frontend/src/assets/login bg.svg",
+    "output": "assets/design/loginBackground.png"
+  },
+  {
+    "key": "studentLoginBackground",
+    "source": "frontend/src/assets/background_img_login_page.jpg",
+    "output": "assets/design/studentLoginBackground.jpg"
+  },
+  {
+    "key": "headerDrops",
+    "source": "frontend/src/assets/drops_login (1).svg",
+    "output": "assets/design/headerDrops.png"
+  },
+  {
+    "key": "loginTiger",
+    "source": "frontend/src/assets/tiger_login.svg",
+    "output": "assets/design/loginTiger.png"
+  },
+  {
+    "key": "tiger",
+    "source": "frontend/src/assets/tiger.svg",
+    "output": "assets/design/tiger.png"
+  },
+  {
+    "key": "dashboardTiger",
+    "source": "frontend/src/assets/tiger_dashborad.svg",
+    "output": "assets/design/dashboardTiger.png"
+  },
+  {
+    "key": "classroomTiger",
+    "source": "frontend/src/assets/my-class-tiger.svg",
+    "output": "assets/design/classroomTiger.png"
+  },
+  {
+    "key": "user",
+    "source": "frontend/src/assets/Users.svg",
+    "output": "assets/design/user.png"
+  },
+  {
+    "key": "accountUser",
+    "source": "frontend/src/assets/userIcon.svg",
+    "output": "assets/design/accountUser.png"
+  },
+  {
+    "key": "home",
+    "source": "frontend/src/assets/home_02.svg",
+    "output": "assets/design/home.png"
+  },
+  {
+    "key": "logout",
+    "source": "frontend/src/assets/Log out.svg",
+    "output": "assets/design/logout.png"
+  },
+  {
+    "key": "back",
+    "source": "frontend/src/assets/back_icon.svg",
+    "output": "assets/design/back.png"
+  },
+  {
+    "key": "accountArrowRight",
+    "source": "frontend/src/assets/ArrowRight.svg",
+    "output": "assets/design/accountArrowRight.png"
+  },
+  {
+    "key": "accountArrowLeft",
+    "source": "frontend/src/assets/ArrowLeft.svg",
+    "output": "assets/design/accountArrowLeft.png"
+  },
+  {
+    "key": "alphabet",
+    "source": "frontend/src/assets/alphabet login.svg",
+    "output": "assets/design/alphabet.png"
+  },
+  {
+    "key": "letterBackground",
+    "source": "frontend/src/assets/background-letterdashboard.svg",
+    "output": "assets/design/letterBackground.png"
+  },
+  {
+    "key": "activityBackground",
+    "source": "frontend/src/assets/background-learnLetter.svg",
+    "output": "assets/design/activityBackground.png"
+  },
+  {
+    "key": "letterContainer",
+    "source": "frontend/src/assets/container_alphabet.svg",
+    "output": "assets/design/letterContainer.png"
+  },
+  {
+    "key": "learn",
+    "source": "frontend/src/assets/learn_alphabet 2.svg",
+    "output": "assets/design/learn.png"
+  },
+  {
+    "key": "write",
+    "source": "frontend/src/assets/write_alphabet 2.svg",
+    "output": "assets/design/write.png"
+  },
+  {
+    "key": "position",
+    "source": "frontend/src/assets/location_alphabet 2.svg",
+    "output": "assets/design/position.png"
+  },
+  {
+    "key": "tashkeel",
+    "source": "frontend/src/assets/tashkeel_alphabet 2.svg",
+    "output": "assets/design/tashkeel.png"
+  },
+  {
+    "key": "video",
+    "source": "frontend/src/assets/videos_alphabet 2.svg",
+    "output": "assets/design/video.png"
+  },
+  {
+    "key": "game",
+    "source": "frontend/src/assets/games_alphabet 2.svg",
+    "output": "assets/design/game.png"
+  },
+  {
+    "key": "learnNav",
+    "source": "frontend/src/assets/learn_alphabet.svg",
+    "output": "assets/design/learnNav.png"
+  },
+  {
+    "key": "writeNav",
+    "source": "frontend/src/assets/write_alphabet.svg",
+    "output": "assets/design/writeNav.png"
+  },
+  {
+    "key": "positionNav",
+    "source": "frontend/src/assets/location_alphabet.svg",
+    "output": "assets/design/positionNav.png"
+  },
+  {
+    "key": "tashkeelNav",
+    "source": "frontend/src/assets/tashkeel_alphabet (2).svg",
+    "output": "assets/design/tashkeelNav.png"
+  },
+  {
+    "key": "videoNav",
+    "source": "frontend/src/assets/videos_alphabet.svg",
+    "output": "assets/design/videoNav.png"
+  },
+  {
+    "key": "gameNav",
+    "source": "frontend/src/assets/games_alphabet.svg",
+    "output": "assets/design/gameNav.png"
+  },
+  {
+    "key": "successBackground",
+    "source": "frontend/src/assets/successJoinBg.svg",
+    "output": "assets/design/successBackground.png"
+  },
+  {
+    "key": "successClass",
+    "source": "frontend/src/assets/success_joinClass.svg",
+    "output": "assets/design/successClass.png"
+  },
+  {
+    "key": "star",
+    "source": "frontend/src/assets/star_02.svg",
+    "output": "assets/design/star.png"
+  },
+  {
+    "key": "book",
+    "source": "frontend/src/assets/book.svg",
+    "output": "assets/design/book.png"
+  },
+  {
+    "key": "pen",
+    "source": "frontend/src/assets/pen_02.svg",
+    "output": "assets/design/pen.png"
+  },
+  {
+    "key": "lamb",
+    "source": "frontend/src/assets/lamb.svg",
+    "output": "assets/design/lamb.png"
+  },
+  {
+    "key": "ain",
+    "source": "frontend/src/assets/alainLetter.svg",
+    "output": "assets/design/ain.png"
+  },
+  {
+    "key": "teacherBackground",
+    "source": "frontend/src/assets/Backgroun_teacher.svg",
+    "output": "assets/design/teacherBackground.png"
+  },
+  {
+    "key": "teacherBooks",
+    "source": "frontend/src/assets/bookes2.svg",
+    "output": "assets/design/teacherBooks.png"
+  },
+  {
+    "key": "teacherLaptop",
+    "source": "frontend/src/assets/labtop_teacherDashborad.svg",
+    "output": "assets/design/teacherLaptop.png"
+  },
+  {
+    "key": "teacherAlphabet",
+    "source": "frontend/src/assets/alphabet teacherDashboard.svg",
+    "output": "assets/design/teacherAlphabet.png"
+  },
+  {
+    "key": "catchCard",
+    "source": "frontend/src/assets/wordCatch.png",
+    "output": "assets/design/catchCard.png"
+  },
+  {
+    "key": "sortCard",
+    "source": "frontend/src/assets/sorting.png",
+    "output": "assets/design/sortCard.png"
+  },
+  {
+    "key": "memoryCard",
+    "source": "frontend/src/assets/wordMatch.png",
+    "output": "assets/design/memoryCard.png"
+  },
+  {
+    "key": "balloonCard",
+    "source": "frontend/src/assets/balloon2.png",
+    "output": "assets/design/balloonCard.png"
+  },
+  {
+    "key": "catchBackground",
+    "source": "frontend/src/assets/background-game-catch.png",
+    "output": "assets/design/catchBackground.png"
+  },
+  {
+    "key": "sortingBackground",
+    "source": "frontend/src/assets/background-game-sort.png",
+    "output": "assets/design/sortingBackground.png"
+  },
+  {
+    "key": "memoryBackground",
+    "source": "frontend/src/assets/background-game-match.png",
+    "output": "assets/design/memoryBackground.png"
+  },
+  {
+    "key": "balloonBackground",
+    "source": "frontend/src/assets/background-game-balloon.png",
+    "output": "assets/design/balloonBackground.png"
+  },
+  {
+    "key": "questionBubble",
+    "source": "frontend/src/assets/vector_background.png",
+    "output": "assets/design/questionBubble.png"
+  },
+  {
+    "key": "point",
+    "source": "frontend/src/assets/point_icon.svg",
+    "output": "assets/design/point.png"
+  },
+  {
+    "key": "badge",
+    "source": "frontend/src/assets/badeg_end.svg",
+    "output": "assets/design/badge.png"
+  },
+  {
+    "key": "finishDecoration",
+    "source": "frontend/src/assets/vector_end.svg",
+    "output": "assets/design/finishDecoration.png"
+  },
+  {
+    "key": "lock",
+    "source": "frontend/src/assets/lockIcon.svg",
+    "output": "assets/design/lock.png"
+  },
+  {
+    "key": "check",
+    "source": "frontend/src/assets/check_icon.svg",
+    "output": "assets/design/check.png"
+  },
+  {
+    "key": "resourceRawad",
+    "source": "frontend/src/assets/books_laibrarey.svg",
+    "output": "assets/design/resourceRawad.png"
+  },
+  {
+    "key": "resourceMirati",
+    "source": "frontend/src/assets/books_laibrarey 2.svg",
+    "output": "assets/design/resourceMirati.png"
+  },
+  {
+    "key": "resourceHeader",
+    "source": "frontend/src/assets/girl-2.svg",
+    "output": "assets/design/resourceHeader.png"
+  },
+  {
+    "key": "resourceCheatsheet",
+    "source": "frontend/src/assets/cheatsheet.svg",
+    "output": "assets/design/resourceCheatsheet.png"
+  },
+  {
+    "key": "resourceAlphabet",
+    "source": "frontend/src/assets/alphabet Card.svg",
+    "output": "assets/design/resourceAlphabet.png"
+  },
+  {
+    "key": "resourceActivities",
+    "source": "frontend/src/assets/activeties.svg",
+    "output": "assets/design/resourceActivities.png"
+  },
+  {
+    "key": "resourcePlan",
+    "source": "frontend/src/assets/Plan_img.svg",
+    "output": "assets/design/resourcePlan.png"
+  },
+  {
+    "key": "resourceWords",
+    "source": "frontend/src/assets/Word_card.svg",
+    "output": "assets/design/resourceWords.png"
+  },
+  {
+    "key": "resourceEvaluation",
+    "source": "frontend/src/assets/evaluation.svg",
+    "output": "assets/design/resourceEvaluation.png"
+  },
+  {
+    "key": "letter_0",
+    "source": "frontend/src/assets/الحروف/حرف الالف.svg",
+    "output": "assets/design/letter_0.png"
+  },
+  {
+    "key": "letter_1",
+    "source": "frontend/src/assets/الحروف/حرف الباء.svg",
+    "output": "assets/design/letter_1.png"
+  },
+  {
+    "key": "letter_2",
+    "source": "frontend/src/assets/الحروف/حرف التاء.svg",
+    "output": "assets/design/letter_2.png"
+  },
+  {
+    "key": "letter_3",
+    "source": "frontend/src/assets/الحروف/حرف الثاء.svg",
+    "output": "assets/design/letter_3.png"
+  },
+  {
+    "key": "letter_4",
+    "source": "frontend/src/assets/الحروف/حرف الجيم.svg",
+    "output": "assets/design/letter_4.png"
+  },
+  {
+    "key": "letter_5",
+    "source": "frontend/src/assets/الحروف/حرف الحاء.svg",
+    "output": "assets/design/letter_5.png"
+  },
+  {
+    "key": "letter_6",
+    "source": "frontend/src/assets/الحروف/حرف الخاء.svg",
+    "output": "assets/design/letter_6.png"
+  },
+  {
+    "key": "letter_7",
+    "source": "frontend/src/assets/الحروف/حرف الدال.svg",
+    "output": "assets/design/letter_7.png"
+  },
+  {
+    "key": "letter_8",
+    "source": "frontend/src/assets/الحروف/حرف الذال.svg",
+    "output": "assets/design/letter_8.png"
+  },
+  {
+    "key": "letter_9",
+    "source": "frontend/src/assets/الحروف/حرف الراء.svg",
+    "output": "assets/design/letter_9.png"
+  },
+  {
+    "key": "letter_10",
+    "source": "frontend/src/assets/الحروف/حرف الزاي.svg",
+    "output": "assets/design/letter_10.png"
+  },
+  {
+    "key": "letter_11",
+    "source": "frontend/src/assets/الحروف/حرف السين.svg",
+    "output": "assets/design/letter_11.png"
+  },
+  {
+    "key": "letter_12",
+    "source": "frontend/src/assets/الحروف/حرف الشين.svg",
+    "output": "assets/design/letter_12.png"
+  },
+  {
+    "key": "letter_13",
+    "source": "frontend/src/assets/الحروف/حرف الصاد.svg",
+    "output": "assets/design/letter_13.png"
+  },
+  {
+    "key": "letter_14",
+    "source": "frontend/src/assets/الحروف/حرف الضاد.svg",
+    "output": "assets/design/letter_14.png"
+  },
+  {
+    "key": "letter_15",
+    "source": "frontend/src/assets/الحروف/حرف الطاء.svg",
+    "output": "assets/design/letter_15.png"
+  },
+  {
+    "key": "letter_16",
+    "source": "frontend/src/assets/الحروف/حرف الظاد.svg",
+    "output": "assets/design/letter_16.png"
+  },
+  {
+    "key": "letter_17",
+    "source": "frontend/src/assets/الحروف/حرف العين.svg",
+    "output": "assets/design/letter_17.png"
+  },
+  {
+    "key": "letter_18",
+    "source": "frontend/src/assets/الحروف/حرف الغين.svg",
+    "output": "assets/design/letter_18.png"
+  },
+  {
+    "key": "letter_19",
+    "source": "frontend/src/assets/الحروف/حرف الفاء.svg",
+    "output": "assets/design/letter_19.png"
+  },
+  {
+    "key": "letter_20",
+    "source": "frontend/src/assets/الحروف/حرف القاف.svg",
+    "output": "assets/design/letter_20.png"
+  },
+  {
+    "key": "letter_21",
+    "source": "frontend/src/assets/الحروف/حرف الكاف.svg",
+    "output": "assets/design/letter_21.png"
+  },
+  {
+    "key": "letter_22",
+    "source": "frontend/src/assets/الحروف/حرف اللام.svg",
+    "output": "assets/design/letter_22.png"
+  },
+  {
+    "key": "letter_23",
+    "source": "frontend/src/assets/الحروف/حرف الميم.svg",
+    "output": "assets/design/letter_23.png"
+  },
+  {
+    "key": "letter_24",
+    "source": "frontend/src/assets/الحروف/حرف النون.svg",
+    "output": "assets/design/letter_24.png"
+  },
+  {
+    "key": "letter_25",
+    "source": "frontend/src/assets/الحروف/حرف الهاء.svg",
+    "output": "assets/design/letter_25.png"
+  },
+  {
+    "key": "letter_26",
+    "source": "frontend/src/assets/الحروف/حرف الواو.svg",
+    "output": "assets/design/letter_26.png"
+  },
+  {
+    "key": "letter_27",
+    "source": "frontend/src/assets/الحروف/حرف الياء.svg",
+    "output": "assets/design/letter_27.png"
+  },
+  {
+    "key": "teacherSparkle",
+    "source": "frontend/src/assets/teacher_sparckle.svg",
+    "output": "assets/design/teacherSparkle.png"
+  },
+  {
+    "key": "classroomEmpty",
+    "source": "frontend/src/assets/write icon nave.svg",
+    "output": "assets/design/classroomEmpty.png"
+  },
+  {
+    "key": "progressHeader",
+    "source": "frontend/src/assets/headerBackground_Progress.svg",
+    "output": "assets/design/progressHeader.png"
+  },
+  {
+    "key": "progressActivities",
+    "source": "frontend/src/assets/backgroundActivites.svg",
+    "output": "assets/design/progressActivities.png"
+  },
+  {
+    "key": "progressFooter",
+    "source": "frontend/src/assets/footerProgress.svg",
+    "output": "assets/design/progressFooter.png"
+  },
+  {
+    "key": "progressUser",
+    "source": "frontend/src/assets/Users (1).svg",
+    "output": "assets/design/progressUser.png"
+  },
+  {
+    "key": "progressLearn",
+    "source": "frontend/src/assets/Learn.svg",
+    "output": "assets/design/progressLearn.png"
+  },
+  {
+    "key": "progressWrite",
+    "source": "frontend/src/assets/Write.svg",
+    "output": "assets/design/progressWrite.png"
+  },
+  {
+    "key": "progressTashkeel",
+    "source": "frontend/src/assets/Tashkeel.svg",
+    "output": "assets/design/progressTashkeel.png"
+  },
+  {
+    "key": "progressPosition",
+    "source": "frontend/src/assets/Position.svg",
+    "output": "assets/design/progressPosition.png"
+  },
+  {
+    "key": "progressVideo",
+    "source": "frontend/src/assets/Video.svg",
+    "output": "assets/design/progressVideo.png"
+  },
+  {
+    "key": "progressGame",
+    "source": "frontend/src/assets/Game.svg",
+    "output": "assets/design/progressGame.png"
+  },
+  {
+    "key": "lettersSparkleLeft",
+    "source": "frontend/src/assets/sparckl_01.svg",
+    "output": "assets/design/lettersSparkleLeft.png"
+  },
+  {
+    "key": "lettersSparkleRight",
+    "source": "frontend/src/assets/sparckl_02.svg",
+    "output": "assets/design/lettersSparkleRight.png"
+  },
+  {
+    "key": "activityAlphabet",
+    "source": "frontend/src/assets/abc.svg",
+    "output": "assets/design/activityAlphabet.png"
+  },
+  {
+    "key": "videoCorner",
+    "source": "frontend/src/assets/vector_video.svg",
+    "output": "assets/design/videoCorner.png"
+  },
+  {
+    "key": "quizRestart",
+    "source": "frontend/src/assets/Icon.svg",
+    "output": "assets/design/quizRestart.png"
+  },
+  {
+    "key": "gameStart",
+    "source": "frontend/src/assets/game_botton.svg",
+    "output": "assets/design/gameStart.png"
+  },
+  {
+    "key": "catchLoading",
+    "source": "frontend/src/assets/background_catchLoader 2.png",
+    "output": "assets/design/catchLoading.png"
+  },
+  {
+    "key": "sortingLoading",
+    "source": "frontend/src/assets/background_sorting.png",
+    "output": "assets/design/sortingLoading.png"
+  },
+  {
+    "key": "sortingWordCard",
+    "source": "frontend/src/assets/wordCard-sortGame.svg",
+    "output": "assets/design/sortingWordCard.png"
+  },
+  {
+    "key": "memoryLoading",
+    "source": "frontend/src/assets/background_wordMatch.png",
+    "output": "assets/design/memoryLoading.png"
+  },
+  {
+    "key": "memoryBack",
+    "source": "frontend/src/assets/background_imgMatch.svg",
+    "output": "assets/design/memoryBack.png"
+  },
+  {
+    "key": "balloonLoading",
+    "source": "frontend/src/assets/background_balloon.png",
+    "output": "assets/design/balloonLoading.png"
+  },
+  {
+    "key": "balloonRed",
+    "source": "frontend/src/assets/pink.svg",
+    "output": "assets/design/balloonRed.png"
+  },
+  {
+    "key": "balloonPink",
+    "source": "frontend/src/assets/pink_balloon copy.svg",
+    "output": "assets/design/balloonPink.png"
+  },
+  {
+    "key": "balloonYellow",
+    "source": "frontend/src/assets/yallow.svg",
+    "output": "assets/design/balloonYellow.png"
+  },
+  {
+    "key": "balloonBlue",
+    "source": "frontend/src/assets/blue_balloon copy.svg",
+    "output": "assets/design/balloonBlue.png"
+  },
+  {
+    "key": "balloonPopSound",
+    "source": "frontend/src/assets/balloon pop.mp3",
+    "output": "assets/design/balloonPopSound.mp3"
+  },
+  {
+    "key": "splashBackground",
+    "source": "frontend/src/assets/splash_background.svg",
+    "output": "assets/design/splashBackground.png"
+  },
+  {
+    "key": "splashPen",
+    "source": "frontend/src/assets/pen.svg",
+    "output": "assets/design/splashPen.png"
+  }
+]
