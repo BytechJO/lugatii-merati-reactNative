@@ -6,6 +6,8 @@ import {
   useWindowDimensions,
 } from "react-native";
 import type { ReactNode } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { teacherHeaderLayout } from "./teacherHeaderLayout";
 import { BrandHeader } from "./BrandHeader";
 import { artwork } from "../data/design";
 
@@ -24,32 +26,25 @@ export function TeacherHero({
   showTab?: boolean;
 }) {
   const { width } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
   const phone = width < 768;
   const height = phone
     ? subtitle
       ? 280
       : 230
     : Math.max(210, (width * 222) / 900);
-  const artworkHeight = phone ? Math.min(230, width * 0.56) : height;
-  const artworkWidth = (artworkHeight * 1602) / 394;
   return (
-    <View style={[styles.hero, { minHeight: height }]}>
+    <View style={[styles.hero, { minHeight: height + top, paddingTop: top, flexShrink: 0 }]}>
       <Image
         source={artwork.teacherBackground}
         resizeMode="cover"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: phone ? -artworkWidth * 0.12 : 0,
-          width: phone ? artworkWidth : "100%",
-          height: artworkHeight,
-        }}
+        style={teacherHeaderLayout(width, top)}
       />
       <BrandHeader title="" variant="teacher" onBack={onBack} />
       <View
         style={[
           styles.heading,
-          { top: phone && subtitle ? 88 : height * 0.44 },
+          { top: top + (phone && subtitle ? 88 : height * 0.44) },
           phone && { left: width * 0.55, right: 12 },
         ]}
       >

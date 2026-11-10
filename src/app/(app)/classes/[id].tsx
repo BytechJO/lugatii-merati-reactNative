@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { VerticalScrollView as ScrollView } from '../../../components/VerticalScrollView';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { HeaderSafeAreaView as SafeAreaView } from "../../../components/HeaderSafeAreaView";
 import * as Clipboard from 'expo-clipboard';
 import { Label, Loading, Notice, Page } from '../../../components/ui';
 import { TeacherHero } from '../../../components/TeacherHero';
@@ -39,8 +39,9 @@ function Students({ id, name }: { id: string; name?: string }) {
   };
   const open = (studentId: number) => router.push({ pathname: '/student/[id]', params: { id: String(studentId), classroomId: id, classroomName: classroom.data?.data.name ?? name ?? '' } });
   const list = students.data?.data ?? [];
-  return <SafeAreaView style={styles.page}><ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+  return <SafeAreaView style={styles.page} edges={["left", "right", "bottom"]}>
     <TeacherHero title="الصفوف" showTab={false} onBack={() => router.replace('/classes')} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={styles.main}>
       <Notice error={classroom.error} retry={classroom.reload} />
       {students.loading ? <Loading /> : students.error ? <Notice error={students.error} retry={students.reload} /> : !list.length ? <View style={styles.empty}>

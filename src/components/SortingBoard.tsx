@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, ImageBackground, PanResponder, Pressable, Text, View, useWindowDimensions } from 'react-native';
+import type { ViewInstance } from 'react-native';
+import { getGameImage } from './useGameArtwork';
+import { Animated, Image, PanResponder, Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VerticalScrollView } from './VerticalScrollView';
 import { shuffle } from '../core/games';
@@ -19,9 +21,9 @@ export function SortingBoard({ config, onEnd, active = true, onBack, symbol }: {
   const [dragging, setDragging] = useState<number | null>(null);
   const [hover, setHover] = useState(-1); const [toast, setToast] = useState('');
   const [gridWidth, setGridWidth] = useState(width - 32);
-  const root = useRef<View | null>(null);
+  const root = useRef<ViewInstance | null>(null);
   const bounds = useRef<DropRect>({ x: 0, y: 0, width, height });
-  const zoneRefs = useRef<[View | null, View | null]>([null, null]);
+  const zoneRefs = useRef<[ViewInstance | null, ViewInstance | null]>([null, null]);
   const zones = useRef<[DropRect | null, DropRect | null]>([null, null]);
   const [position] = useState(() => new Animated.ValueXY());
   const letter = symbol ?? config.targetLetter ?? '';
@@ -85,7 +87,7 @@ export function SortingBoard({ config, onEnd, active = true, onBack, symbol }: {
 }
 
 export function SortingWordCard({ word, size }: { word: string; size: number }) {
-  return <ImageBackground source={artwork.sortingWordCard} resizeMode="stretch" style={{ width: size, height: size, maxWidth: '100%', alignItems: 'center', justifyContent: 'center' }}><Text style={{ fontFamily: 'Tajawal-Medium', fontSize: size < 75 ? 14 : 20, color: '#28345F', textAlign: 'center', marginTop: size * 0.04 }} numberOfLines={1} adjustsFontSizeToFit>{word}</Text></ImageBackground>;
+  return <View style={{ width: size, height: size, maxWidth: '100%', alignItems: 'center', justifyContent: 'center' }}><Image pointerEvents="none" accessible={false} source={getGameImage(artwork.sortingWordCard)} resizeMode="stretch" style={{ position: 'absolute', top: 0, left: 0, width: size, height: size }} /><Text style={{ fontFamily: 'Tajawal-Medium', fontSize: size < 75 ? 14 : 20, color: '#28345F', textAlign: 'center', marginTop: size * 0.04 }} numberOfLines={1} adjustsFontSizeToFit>{word}</Text></View>;
 }
 
 export function SortingDraggable({ item, size, placed, selected, hidden, active, onSelect, onStart, onMove, onDrop, onCancel }: { item: SortingItem; size: number; placed: boolean; selected: boolean; hidden: boolean; active: boolean; onSelect: () => void; onStart: (x: number, y: number) => void; onMove: (x: number, y: number) => void; onDrop: (x: number, y: number) => void; onCancel: () => void }) {

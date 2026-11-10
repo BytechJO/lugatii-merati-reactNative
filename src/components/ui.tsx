@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { ImageBackground, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View, useWindowDimensions, type TextInputProps, type ImageSourcePropType } from 'react-native';
 import { VerticalScrollView as ScrollView } from './VerticalScrollView';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "./HeaderSafeAreaView";
 import { usePathname } from "expo-router";
 import { BrandHeader } from "./BrandHeader";
 import { artwork } from "../data/design";
@@ -24,6 +24,7 @@ export function Page({
   plain = false,
   onBack,
   headerVariant = 'default',
+  scrollEnabled = true,
 }: {
   title: string;
   children: ReactNode;
@@ -32,6 +33,7 @@ export function Page({
   plain?: boolean;
   onBack?: () => void;
   headerVariant?: 'default' | 'transparent';
+  scrollEnabled?: boolean;
 }) {
   const { width } = useWindowDimensions();
   const path = usePathname();
@@ -58,7 +60,7 @@ export function Page({
       resizeMode="cover"
       style={[s.flex, plain && { backgroundColor: "white" }]}
     >
-      <SafeAreaView style={s.safe}>
+      <SafeAreaView style={s.safe} headerBackground={headerVariant === 'default' ? 'white' : undefined}>
         <KeyboardAvoidingView
           style={s.flex}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -66,6 +68,10 @@ export function Page({
           <BrandHeader title={title} onBack={onBack} variant={headerVariant} />
           <ScrollView
             keyboardShouldPersistTaps="handled"
+            scrollEnabled={scrollEnabled}
+            bounces={scrollEnabled}
+            alwaysBounceVertical={scrollEnabled}
+            canCancelContentTouches={scrollEnabled}
             contentContainerStyle={[
               s.content,
               { paddingHorizontal: width >= 768 ? 40 : 20 },

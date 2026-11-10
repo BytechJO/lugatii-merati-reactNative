@@ -12,6 +12,7 @@ export function GameLoadingScreen({ gameType }: { gameType: GameType }) {
   const images = { word_catch: artwork.catchLoading, sorting: artwork.sortingLoading, memory_match: artwork.memoryLoading, balloon_pop: artwork.balloonLoading };
   const source = images[gameType];
   const image = Image.resolveAssetSource(source);
+  const imageRatio = image?.width && image.height ? image.height / image.width : 1;
   const [panelWidth, setPanelWidth] = useState(Math.min(720, Math.max(0, width - 32)));
   const [dots, setDots] = useState(0);
   const [progress] = useState(() => new Animated.Value(0));
@@ -38,7 +39,7 @@ export function GameLoadingScreen({ gameType }: { gameType: GameType }) {
       <VerticalScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16, paddingVertical: landscape ? 12 : 20 }}>
         <View onLayout={(event) => setPanelWidth(event.nativeEvent.layout.width)} style={{ width: '100%', maxWidth: 720, minWidth: 0, backgroundColor: 'white', borderWidth: 1, borderColor: '#FFFFFFD9', borderRadius: landscape ? 22 : 28, overflow: 'hidden', boxShadow: '0px 20px 60px #4B1A7A33' }}>
           <View style={{ flexDirection: landscape ? 'row' : 'column', alignItems: 'center', width: '100%', minWidth: 0 }}>
-            <Image source={source} accessible={false} resizeMode="contain" style={{ width: artWidth, height: artWidth * image.height / image.width, maxWidth: '100%' }} />
+            <Image source={source} accessible={false} resizeMode="contain" style={{ width: artWidth, height: artWidth * imageRatio, maxWidth: '100%' }} />
             <LinearGradient colors={['#FFFFFF', '#FAF5FF']} style={{ width: statusWidth, minWidth: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center', paddingTop: landscape ? 16 : 22, paddingHorizontal: landscape ? 16 : 24, paddingBottom: landscape ? 16 : 26, gap: landscape ? 10 : 14 }}>
               <Text style={{ fontFamily: 'Tajawal-Medium', fontSize: 14, color: '#9466B5', textAlign: 'center' }}>هيا نلعب ونتعلم</Text>
               <Text accessibilityRole="text" style={{ fontFamily: 'Tajawal-Bold', fontSize, lineHeight: fontSize * 1.5, color: '#652B82', textAlign: 'center' }}>جاري تحميل اللعبة{'.'.repeat(dots)}</Text>

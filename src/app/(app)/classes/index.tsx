@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { VerticalScrollView as ScrollView } from "../../../components/VerticalScrollView";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "../../../components/HeaderSafeAreaView";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path } from "react-native-svg";
 import { Redirect, router } from "expo-router";
@@ -81,14 +81,10 @@ function TeacherClasses() {
   };
   const open = (item: Classroom) =>
     router.push(`/classes/${item.id}?name=${encodeURIComponent(item.name)}`);
-  return (
-    <SafeAreaView style={styles.page}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <TeacherHero
-          title="الصفوف"
-          onBack={() => router.replace("/home")}
-          action={
-            <Pressable
+  const classes = resource.data?.data ?? [];
+  const isEmpty = !resource.loading && (resource.status === 404 || (!resource.error && classes.length === 0));
+  const createAction = (
+    <Pressable
               accessibilityRole="button"
               onPress={() => {
                 setError(null);
@@ -96,36 +92,37 @@ function TeacherClasses() {
               }}
             >
               <LinearGradient
-                colors={["#FFE066", "#FDB913"]}
-                style={styles.createAction}
+                colors={isEmpty ? ["#FFF18B", "#FFD82A", "#FFB800"] : ["#FFE066", "#FDB913"]}
+                style={[styles.createAction, isEmpty && styles.emptyCreateAction]}
               >
                 <Icon kind="plus" />
                 <Text style={styles.createActionText}>إنشاء صف جديد</Text>
               </LinearGradient>
             </Pressable>
-          }
+  );
+  return (
+    <SafeAreaView style={styles.page} edges={["left", "right", "bottom"]}>
+      
+        <TeacherHero
+          title="الصفوف"
+          onBack={() => router.replace("/home")}
+          action={isEmpty ? undefined : createAction}
+          showTab={false}
         />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.main}>
           {resource.loading ? (
             <Loading />
-          ) : resource.error ? (
+          ) : resource.error && resource.status !== 404 ? (
             <Notice error={resource.error} retry={resource.reload} />
-          ) : !resource.data?.data.length ? (
+          ) : isEmpty ? (
             <View style={styles.empty}>
-              <View style={styles.emptyCircle}>
-                <Image
-                  source={artwork.classroomEmpty}
-                  resizeMode="contain"
-                  style={{ width: 56, height: 56 }}
-                />
-              </View>
-              <Text style={styles.emptyText}>
-                لا توجد صفوف بعد، اضغط على &quot;إنشاء صف جديد&quot; للبدء
-              </Text>
+              <Text style={styles.emptyText}>لا يوجد صفوف</Text>
+              {createAction}
             </View>
           ) : (
             <ClassList
-              items={resource.data.data}
+              items={classes}
               compact={width < 768}
               onOpen={open}
               onDelete={(item) => {
@@ -161,7 +158,13 @@ function TeacherClasses() {
               {creating ? (
                 <View accessibilityViewIsModal style={styles.createForm}>
                   <View style={styles.formHeader}>
-                    <Text style={styles.formTitle}>إنشاء صف جديد</Text>
+                    <Svg pointerEvents="none" width={168} height={68} viewBox="0 0 168 68" style={StyleSheet.absoluteFill}>
+                      <Path d="M0 0H168V40C140 39 126 43 110 54C91 67 67 71 46 65C28 61 23 52 20 39C17 26 0 21 0 0Z" fill="#FFC52B" />
+                    </Svg>
+                    <View style={styles.formHeaderContent}>
+                      <Icon kind="plus" color="#6C5413" />
+                      <Text style={styles.formTitle}>إنشاء صف جديد</Text>
+                    </View>
                   </View>
                   <View style={styles.formBody}>
                     <Text style={styles.fieldLabel}>إسم الصف</Text>
@@ -171,17 +174,20 @@ function TeacherClasses() {
                       editable={!busy}
                       accessibilityLabel="إسم الصف"
                       placeholder="صف اللغة العربية - 563"
+                      placeholderTextColor="#9B9B9B"
                       style={styles.nameInput}
                     />
                     <Notice error={error} />
                   </View>
-                  <View style={styles.modalActions}>
+                  <View style={[styles.modalActions, styles.createActions]}>
                     <ModalButton
+                      variant="create"
                       title={busy ? "جارٍ الإضافة…" : "إضافة"}
                       disabled={busy || !name.trim()}
                       onPress={() => void create()}
                     />
                     <ModalButton
+                      variant="create"
                       title="إلغاء"
                       disabled={busy}
                       onPress={close}
@@ -354,11 +360,13 @@ function ModalButton({
   onPress,
   disabled,
   danger,
+  variant = "default",
 }: {
   title: string;
   onPress: () => void;
   disabled?: boolean;
   danger?: boolean;
+  variant?: "default" | "create";
 }) {
   return (
     <Pressable
@@ -367,13 +375,14 @@ function ModalButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.modalButton,
+        variant === "create" && styles.createButton,
         {
-          backgroundColor: danger ? "#F32525" : "#FDC333",
+          backgroundColor: danger ? "#F32525" : variant === "create" ? "#652B82" : "#FDC333",
           opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
         },
       ]}
     >
-      <Text style={[styles.modalButtonText, danger && { color: "white" }]}>
+      <Text style={[styles.modalButtonText, variant === "create" && styles.createButtonText, danger && { color: "white" }]}>
         {title}
       </Text>
     </Pressable>
@@ -487,27 +496,31 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   empty: {
-    alignItems: "center",
-    gap: 20,
-    backgroundColor: "#F7F5FC",
-    paddingVertical: 64,
-    paddingHorizontal: 20,
-    borderRadius: 24,
-  },
-  emptyCircle: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: "#EAE6FA",
+    width: "100%",
+    minHeight: 260,
     alignItems: "center",
     justifyContent: "center",
+    gap: 24,
+    backgroundColor: "#F7F5FC",
+    paddingVertical: 48,
+    paddingHorizontal: 20,
+    borderRadius: 20,
   },
   emptyText: {
     fontFamily: "Tajawal",
-    fontSize: 20,
+    fontSize: 15,
     textAlign: "center",
-    color: "#3E3E3E",
-    lineHeight: 30,
+    color: "#8B8B8B",
+    lineHeight: 22,
+  },
+  emptyCreateAction: {
+    width: 208,
+    maxWidth: "100%",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "#F7B514",
+    boxShadow: "0px 2px 3px #FDC33330",
   },
   tableHead: {
     height: 46,
@@ -569,34 +582,52 @@ const styles = StyleSheet.create({
   createForm: {
     width: "100%",
     maxWidth: 360,
-    backgroundColor: "#F3F4F6",
-    // paddingVertical: 40,
-    paddingBottom: 30,
-    gap: 32,
+    backgroundColor: "white",
+    borderRadius: 20,
+    overflow: "hidden",
+    paddingBottom: 24,
+    gap: 24,
   },
-  formHeader: {
-    minHeight: 73,
-    backgroundColor: "#652B82",
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    padding: 20,
+  formHeader: { width: 168, height: 68, alignSelf: "flex-end" },
+  formHeaderContent: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
     justifyContent: "center",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingTop: 12,
   },
   formTitle: {
-    fontFamily: "Tajawal-Bold",
-    fontSize: 24,
-    color: "white",
+    fontFamily: "Tajawal",
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#6C5413",
     textAlign: "right",
+    flexShrink: 1,
   },
-  // paddingVertical: 40,
-  formBody: { paddingHorizontal: 28, gap: 20, paddingVertical: 20 },
+  formBody: { paddingHorizontal: 20, gap: 16 },
   fieldLabel: {
-    fontFamily: "Tajawal-Bold",
-    fontSize: 22,
+    fontFamily: "Tajawal",
+    fontSize: 20,
+    lineHeight: 26,
+    color: "#3E3E3E",
+    textAlign: "center",
+  },
+  nameInput: {
+    backgroundColor: "#F3F3F3",
+    borderRadius: 10,
+    borderWidth: 0,
+    minHeight: 48,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontFamily: "Tajawal",
+    fontSize: 15,
     color: "#3E3E3E",
     textAlign: "right",
   },
-  nameInput: { backgroundColor: "#E5E7EB", borderRadius: 0, borderWidth: 0 },
+  createActions: { flexWrap: "nowrap", gap: 8, paddingHorizontal: 30 },
+  createButton: { flex: 1, minWidth: 0, minHeight: 52, paddingHorizontal: 8 },
+  createButtonText: { color: "white", fontFamily: "Tajawal", fontSize: 18, lineHeight: 26 },
   modalActions: {
     flexDirection: "row-reverse",
     flexWrap: "wrap",

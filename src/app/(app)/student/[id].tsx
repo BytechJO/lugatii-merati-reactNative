@@ -9,7 +9,8 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { VerticalScrollView as ScrollView } from "../../../components/VerticalScrollView";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "../../../components/HeaderSafeAreaView";
 import { Label, Loading, Notice, Page } from "../../../components/ui";
 import { StudentIcon } from "../../../components/StudentIcon";
 import { useResource } from "../../../core/useResource";
@@ -95,6 +96,7 @@ function ProgressContent({
     `/progress/students/${id}/progress`,
   );
   const { width } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
   const phone = width < 768;
   const heroHeight = phone ? 200 : Math.max(180, (width * 160) / 902);
   const progress = resource.data?.data;
@@ -131,7 +133,7 @@ function ProgressContent({
     else router.replace("/classes");
   };
   return (
-    <SafeAreaView style={styles.page}>
+    <SafeAreaView style={styles.page} headerArtwork="progress">
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
         <View style={[styles.hero, { height: heroHeight }]}>
           <View
@@ -149,7 +151,9 @@ function ProgressContent({
               resizeMode="cover"
               style={{
                 width: phone ? (heroHeight * 1600) / 293 : width,
-                height: heroHeight,
+                height: heroHeight + top,
+                position: "absolute",
+                top: -top,
               }}
             />
           </View>

@@ -58,6 +58,7 @@ function screen(name, { teacher = false, data, component = name, ...overrides } 
     'react-native': { Image: 'Image', ImageBackground: 'ImageBackground', Modal: 'Modal', Pressable: 'Pressable', Text: 'Text', View: 'View', StyleSheet: { create: (styles) => styles }, useWindowDimensions: () => ({ width: 390, height: 844 }) },
     'expo-router': { router: { push: (url) => writes.push(['navigation', url]), replace: (url) => writes.push(['navigation', url]) } },
     'react-native-safe-area-context': { SafeAreaView: 'SafeAreaView' },
+    './HeaderSafeAreaView': { HeaderSafeAreaView: 'SafeAreaView' },
     'expo-linear-gradient': { LinearGradient: 'LinearGradient' },
     './ui': { Button: 'Button', Card: 'Card', Label: 'Label', Loading: 'Loading', Notice: 'Notice', colors: { purple: '#652B82', ink: '#28345F' } },
     './LessonVideo': { LessonVideo: 'LessonVideo' },
@@ -69,6 +70,7 @@ function screen(name, { teacher = false, data, component = name, ...overrides } 
     './MemoryBoard': { MemoryBoard: 'MemoryBoard' },
     './BalloonBoard': { BalloonBoard: 'BalloonBoard' },
     './GameLoadingScreen': { GameLoadingScreen: 'GameLoadingScreen' },
+    './useGameArtwork': { useGameArtwork: () => ({ loading: false, error: null, reload() {} }), getGameImage: (source) => source },
     'expo-audio': { useAudioPlayer: () => player },
     '../core/useResource': { useResource: () => ({ data, loading: false, error: null, reload() {} }) },
     '../core/session': { useSession: () => ({ session: { user: { role: teacher ? 'teacher' : 'student' } } }) },
@@ -201,7 +203,7 @@ test('memory card uses the original back, hides its accessible answer and shows 
 
 function sortingScreen(component = 'SortingBoard') {
   let handlers;
-  const native = { ImageBackground: 'ImageBackground', Pressable: 'Pressable', Text: 'Text', View: 'View', useWindowDimensions: () => ({ width: 390, height: 844 }), Animated: { View: 'AnimatedView', ValueXY: class { setValue() {} getTranslateTransform() { return []; } } }, PanResponder: { create(config) { handlers = config; return { panHandlers: {} }; } } };
+  const native = { Image: 'Image', ImageBackground: 'ImageBackground', Pressable: 'Pressable', Text: 'Text', View: 'View', useWindowDimensions: () => ({ width: 390, height: 844 }), Animated: { View: 'AnimatedView', ValueXY: class { setValue() {} getTranslateTransform() { return []; } } }, PanResponder: { create(config) { handlers = config; return { panHandlers: {} }; } } };
   const app = screen('SortingBoard', { component, 'react-native': native, '../core/sorting': localModule('../src/core/sorting.ts') });
   return { ...app, gestures: () => handlers };
 }
@@ -257,10 +259,11 @@ test('sorting board measures native zones, returns outside drops and places a wo
 });
 
 function coloringScreen(teacher = false, saveProgress) {
-  let handlers;
+  let handlers; let appStateChange;
   const app = screen('Coloring', {
     teacher, component: 'ColoringBoard',
     'react-native': {
+      AppState: { addEventListener(_, callback) { appStateChange = callback; return { remove() {} }; } },
       View: 'View', Pressable: 'Pressable', Text: 'Text',
       useWindowDimensions: () => ({ width: 390, height: 844 }),
       PanResponder: { create(config) { handlers = config; return { panHandlers: {} }; } },
@@ -273,7 +276,7 @@ function coloringScreen(teacher = false, saveProgress) {
     './ui': { Button: 'Button', Card: 'Card', Label: 'Label', Notice: 'Notice', s: { row: {} } },
     ...(saveProgress ? { '../core/api': { saveProgress, errorMessage: (error) => String(error) } } : {}),
   });
-  return { ...app, gestures: () => handlers };
+  return { ...app, gestures: () => handlers, changeAppState: (value) => appStateChange(value) };
 }
 
 for (const symbol of ['ب', 'ت']) {
@@ -399,11 +402,19 @@ test('coloring automatically saves before reset and preserves the drawing on sav
   const props = { letterId: 9, symbol: 'ب' };
   const resetButton = (tree) => tree.find((node) => node.type === 'Button' && node.props.label === 'إعادة التلوين');
   const strokes = (tree) => tree.filter((node) => node.type === 'Path' && node.props.stroke);
-  app.render(props);
+  const nextButton = (tree) => tree.find((node) => node.type === 'Button' && node.props.label === 'التالي: مكان الحرف');
+  let initial = app.render(props);
+  assert.equal(resetButton(initial).props.disabled, true);
+  assert.equal(nextButton(initial).props.disabled, true);
+  nextButton(initial).props.onPress();
+  assert.equal(app.writes.length, 0);
   app.gestures().onPanResponderGrant({ nativeEvent: { locationX: 0, locationY: 0 } });
   app.gestures().onPanResponderRelease();
   let tree = app.render(props);
   assert.equal(attempts, 1, 'saving starts on completing the drawing, before reset');
+  assert.equal(nextButton(tree).props.disabled, true);
+  nextButton(tree).props.onPress();
+  assert.equal(app.writes.length, 0);
   assert.equal(resetButton(tree).props.disabled, true);
   resetButton(tree).props.onPress();
   tree = app.render(props);
@@ -411,6 +422,9 @@ test('coloring automatically saves before reset and preserves the drawing on sav
   rejectSave(new Error('offline'));
   await settle();
   tree = app.render(props);
+  assert.equal(nextButton(tree).props.disabled, true);
+  nextButton(tree).props.onPress();
+  assert.equal(app.writes.length, 0);
   assert.equal(resetButton(tree).props.disabled, true);
   resetButton(tree).props.onPress();
   tree = app.render(props);
@@ -426,6 +440,29 @@ test('coloring automatically saves before reset and preserves the drawing on sav
   tree = app.render(props);
   assert.equal(strokes(tree).length, 0);
   assert.equal(attempts, 2);
+  assert.equal(resetButton(tree).props.disabled, true, 'reset is disabled again after clearing');
+  assert.equal(nextButton(tree).props.disabled, false, 'saved completion survives resetting');
+  nextButton(tree).props.onPress();
+  assert.equal(app.writes.length, 1);
+  assert.equal(app.writes[0][1], '/activity/position?letterId=9&symbol=' + encodeURIComponent('ب'));
+});
+
+test('coloring reset activates after the first stroke without completing or saving the activity', () => {
+  const app = coloringScreen();
+  const props = { letterId: 9, symbol: 'ب' };
+  const reset = (tree) => tree.find((node) => node.type === 'Button' && node.props.label === 'إعادة التلوين');
+  let tree = app.render(props);
+  assert.equal(reset(tree).props.disabled, true);
+  app.gestures().onPanResponderGrant({ nativeEvent: { locationX: 200, locationY: 200 } });
+  app.gestures().onPanResponderRelease();
+  tree = app.render(props);
+  assert.equal(reset(tree).props.disabled, false);
+  assert.equal(tree.find((node) => node.type === 'Button' && node.props.label === 'التالي: مكان الحرف').props.disabled, true);
+  reset(tree).props.onPress();
+  tree = app.render(props);
+  assert.equal(reset(tree).props.disabled, true);
+  assert.equal(tree.filter((node) => node.type === 'Path' && node.props.stroke).length, 0);
+  assert.equal(app.writes.length, 0);
 });
 
 for (const teacher of [true, false]) {
@@ -557,7 +594,7 @@ test('tashkeel options display all four marks and use the correct alif form for 
 
 for (const teacher of [true, false]) {
   test(`video cards save on playback completion only (${teacher ? 'teacher' : 'student'})`, async () => {
-    const app = screen('Videos', { teacher, data: { data: [{ id: 1, video_title: 'Lesson title', youtube_url: 'https://example.test/video.mp4' }] } });
+    const app = screen('Videos', { teacher, data: { data: [{ video_id: 1, video_title: 'Lesson title', youtube_url: 'https://example.test/video.mp4' }] } });
     let tree = app.render({ letterId: 7 });
     assert.ok(JSON.stringify(tree).includes('Lesson title'));
     assert.equal(tree.filter((node) => node.type === 'LessonVideo').length, 0);
@@ -587,4 +624,142 @@ test('lesson intro waits for playback and allows missing-video previews without 
   tree = missing.render(props);
   tree.find((node) => node.type === 'Button').props.onPress();
   assert.equal(ended, 1);
+});
+
+test('video cards use backend video_id keys, preserve identity on reorder and open the selected video', () => {
+  const videos = [
+    { video_id: 81, video_title: 'Writing', youtube_url: 'https://example.test/write.mp4' },
+    { video_id: 82, video_title: 'Learning', youtube_url: 'https://example.test/learn.mp4' },
+  ];
+  const app = screen('Videos', { data: { data: videos } });
+  let tree = app.render({ letterId: 7 });
+  const cards = (nodes) => nodes.filter((node) => node.type === 'Pressable');
+  assert.deepEqual(cards(tree).map((node) => node.key), ['81', '82']);
+  videos.reverse();
+  tree = app.render({ letterId: 7 });
+  assert.deepEqual(cards(tree).map((node) => node.key), ['82', '81']);
+  cards(tree)[0].props.onPress();
+  tree = app.render({ letterId: 7 });
+  const player = tree.find((node) => node.type === 'LessonVideo');
+  assert.equal(player.key, '82');
+  assert.equal(player.props.uri, 'https://example.test/learn.mp4');
+  assert.equal(app.writes.length, 0);
+});
+
+test('video cards keep legacy ids and unique fallback keys for rows without ids', () => {
+  const app = screen('Videos', { data: { data: [
+    { id: 91, youtube_url: 'https://example.test/legacy.mp4' },
+    { youtube_url: 'https://example.test/shared.mp4' },
+    { youtube_url: 'https://example.test/shared.mp4' },
+  ] } });
+  const keys = app.render({ letterId: 7 }).filter((node) => node.type === 'Pressable').map((node) => node.key);
+  assert.equal(keys[0], '91');
+  assert.ok(keys.every((key) => key != null));
+  assert.equal(new Set(keys).size, 3);
+});
+
+test('game timers do not mount until artwork is cached and failed artwork can retry', () => {
+  const assets = { loading: true, error: null, reload() { assets.loading = true; assets.error = null; } };
+  const app = screen('WordCatchScreen', { './WordCatchGame': { WordCatchGame: 'WordCatchGame' }, './useGameArtwork': { useGameArtwork: () => assets, getGameImage: (source) => source } });
+  const props = { loading: false, gameType: 'sorting', game: { game_lesson_id: 1, letter_id: 9, data: {} }, onBack() {}, onRetry() {} };
+  let tree = app.render(props);
+  assert.equal(tree[0].type, 'GameLoadingScreen');
+  assert.equal(tree.some((node) => node.type?.name === 'CatchRound'), false);
+  assets.loading = false; assets.error = 'image unavailable';
+  tree = app.render(props);
+  assert.equal(tree.some((node) => node.type?.name === 'CatchRound'), false);
+  tree.find((node) => node.type === 'Notice').props.retry();
+  assert.equal(app.render(props)[0].type, 'GameLoadingScreen');
+  assets.loading = false;
+  assert.ok(app.render(props).some((node) => node.type?.name === 'CatchRound'));
+  assert.equal(app.writes.length, 0);
+});
+
+test('game images use downloaded device-local files instead of requesting the tunnel repeatedly', () => {
+  const cached = { localUri: 'file:///cache/card.png' };
+  const mod = localModule('../src/components/useGameArtwork.tsx', {
+    'expo-asset': { Asset: { fromModule: () => cached } }, '../data/design': design,
+  });
+  assert.equal(mod.getGameImage(1).uri, 'file:///cache/card.png');
+  cached.localUri = null;
+  assert.equal(mod.getGameImage(1), 1);
+});
+
+test('game artwork loading waits for downloads and retries a failed download', async () => {
+  const pending = []; const downloads = [];
+  const app = screen('useGameArtwork', { component: 'useGameArtwork',
+    'expo-asset': { Asset: { loadAsync(images) {
+      downloads.push(images);
+      return new Promise((resolve, reject) => pending.push({ resolve, reject }));
+    } } },
+  });
+  let state = app.render('memory_match')[0];
+  assert.equal(state.loading, true);
+  assert.ok(downloads[0].includes('memoryBack'));
+  pending[0].reject(new Error('offline')); await settle();
+  state = app.render('memory_match')[0];
+  assert.equal(state.loading, false);
+  assert.ok(state.error);
+  state.reload();
+  state = app.render('memory_match')[0];
+  assert.equal(state.loading, true);
+  pending.at(-1).resolve([]); await settle();
+  state = app.render('memory_match')[0];
+  assert.equal(state.loading, false);
+  assert.equal(state.error, null);
+  assert.equal(app.writes.length, 0);
+});
+
+test('coloring captures the canvas gesture and unlocks scrolling on release, cancellation and backgrounding', () => {
+  const locks = [];
+  const app = coloringScreen();
+  const props = { letterId: 9, symbol: 'ب', onDrawingChange: (drawing) => locks.push(drawing) };
+  let tree = app.render(props);
+  const canvas = () => tree.find((node) => node.props.onTouchStart);
+  const gestures = app.gestures();
+  assert.equal(gestures.onStartShouldSetPanResponderCapture(), true);
+  assert.equal(gestures.onMoveShouldSetPanResponderCapture(), true);
+  assert.equal(gestures.onShouldBlockNativeResponder(), true);
+  canvas().props.onTouchStart();
+  assert.equal(locks.at(-1), true);
+  gestures.onPanResponderGrant({ nativeEvent: { locationX: 200, locationY: 200 } });
+  gestures.onPanResponderRelease();
+  assert.equal(locks.at(-1), false);
+  canvas().props.onTouchStart();
+  canvas().props.onTouchEnd({ nativeEvent: { touches: [{}] } });
+  assert.equal(locks.at(-1), true, 'an additional finger keeps the canvas locked');
+  canvas().props.onTouchEnd({ nativeEvent: { touches: [] } });
+  assert.equal(locks.at(-1), false);
+  canvas().props.onTouchStart(); canvas().props.onTouchCancel();
+  assert.equal(locks.at(-1), false);
+  canvas().props.onTouchStart(); gestures.onPanResponderTerminate();
+  assert.equal(locks.at(-1), false);
+  canvas().props.onTouchStart(); app.changeAppState('background');
+  assert.equal(locks.at(-1), false);
+  assert.equal(app.writes.length, 0);
+});
+
+test('teacher coloring preview does not capture gestures or lock scrolling', () => {
+  const locks = [];
+  const app = coloringScreen(true);
+  const tree = app.render({ letterId: 9, symbol: 'ب', onDrawingChange: (drawing) => locks.push(drawing) });
+  assert.equal(app.gestures().onStartShouldSetPanResponderCapture(), false);
+  assert.equal(app.gestures().onShouldBlockNativeResponder(), false);
+  tree.find((node) => node.props.onTouchStart).props.onTouchStart();
+  assert.equal(locks.length, 0);
+});
+
+test('page disables native scrolling and iOS bounce while drawing, then restores both', () => {
+  const app = screen('ui', { component: 'Page',
+    './BrandHeader': { BrandHeader: 'BrandHeader' }, './AppLoading': { AppLoading: 'Loading' },
+    'expo-router': { usePathname: () => '/activity/write' },
+    'react-native': { ImageBackground: 'ImageBackground', KeyboardAvoidingView: 'KeyboardAvoidingView', Platform: { OS: 'ios' }, Pressable: 'Pressable', Text: 'Text', TextInput: 'TextInput', View: 'View', StyleSheet: { create: (value) => value }, useWindowDimensions: () => ({ width: 390 }) },
+  });
+  for (const enabled of [false, true]) {
+    const tree = app.render({ title: '', children: null, scrollEnabled: enabled });
+    const scroll = tree.find((node) => node.type === 'VerticalScrollView');
+    assert.equal(scroll.props.scrollEnabled, enabled);
+    assert.equal(scroll.props.bounces, enabled);
+    assert.equal(scroll.props.canCancelContentTouches, enabled);
+  }
 });

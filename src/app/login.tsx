@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Image, ImageBackground, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { VerticalScrollView as ScrollView } from '../components/VerticalScrollView';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "../components/HeaderSafeAreaView";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams, Redirect } from "expo-router";
 import { Notice } from "../components/ui";
@@ -51,7 +51,7 @@ export default function LoginScreen() {
           style={StyleSheet.absoluteFill}
         />
       )}
-      <SafeAreaView style={styles.page}>
+      <SafeAreaView style={styles.page} headerBackground="white">
         <BrandHeader title="مرآتي لغتي" />
         <KeyboardAvoidingView
           style={styles.page}

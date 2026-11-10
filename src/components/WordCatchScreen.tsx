@@ -15,6 +15,7 @@ import { WordCatchGame } from "./WordCatchGame";
 import { SortingBoard } from './SortingBoard';
 import { MemoryBoard } from './MemoryBoard';
 import { BalloonBoard } from './BalloonBoard';
+import { useGameArtwork, getGameImage } from './useGameArtwork';
 import { GameLoadingScreen } from './GameLoadingScreen';
 import { artwork } from "../data/design";
 import { errorMessage, saveGame } from "../core/api";
@@ -40,7 +41,9 @@ export function WordCatchScreen({
   gameType?: GameType;
   symbol?: string;
 }) {
-  if (loading) return <GameLoadingScreen gameType={gameType} />;
+  const images = useGameArtwork(gameType);
+  const retry = () => { images.reload(); onRetry(); };
+  if (loading || images.loading) return <GameLoadingScreen gameType={gameType} />;
   const backgrounds = {
     word_catch: [artwork.catchLoading, artwork.catchBackground],
     sorting: [artwork.sortingLoading, artwork.sortingBackground],
@@ -49,12 +52,12 @@ export function WordCatchScreen({
   };
   return (
     <ImageBackground
-      source={backgrounds[gameType][loading ? 0 : 1]}
+      source={getGameImage(backgrounds[gameType][1])}
       resizeMode="cover"
       style={{ flex: 1 }}
     >
       <SafeAreaView style={{ flex: 1 }}>
-        {error || !game ? (
+        {error || images.error || !game ? (
           <View
             style={{
               margin: 24,
@@ -65,8 +68,8 @@ export function WordCatchScreen({
             }}
           >
             <Notice
-              error={error || "محتوى اللعبة غير مكتمل لهذا الحرف."}
-              retry={onRetry}
+              error={error || images.error || "محتوى اللعبة غير مكتمل لهذا الحرف."}
+              retry={retry}
             />
             <Button secondary label="العودة إلى الألعاب" onPress={onBack} />
           </View>

@@ -1,7 +1,7 @@
 import { Redirect, router } from "expo-router";
 import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { VerticalScrollView as ScrollView } from '../../components/VerticalScrollView';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "../../components/HeaderSafeAreaView";
 import { useSession } from "../../core/session";
 import { TeacherHero } from "../../components/TeacherHero";
 import { artwork } from "../../data/design";
@@ -44,9 +44,10 @@ export default function HomeScreen() {
   if (session?.user.role !== "teacher") return <Redirect href="/classroom" />;
 
   return (
-    <SafeAreaView style={styles.page}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+    <SafeAreaView style={styles.page} edges={["left", "right", "bottom"]}>
+      
         <TeacherHero title="رحلة تعليم اللغة العربية تبدأ هنا" />
+      <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.main}>
           <View style={styles.grid}>
             {sections.map((item) => (

@@ -6,11 +6,11 @@ import { useResource } from "../core/useResource";
 import { useSession } from "../core/session";
 import { lessons, type Question } from "../core/types";
 import { artwork } from "../data/design";
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import { PositionQuestion } from './PositionQuestion';
-import { PositionResult } from './PositionResult';
-import { TashkeelQuestion } from './TashkeelQuestion';
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
+import { PositionQuestion } from "./PositionQuestion";
+import { PositionResult } from "./PositionResult";
+import { TashkeelQuestion } from "./TashkeelQuestion";
 export function Quiz({
   letterId,
   symbol,
@@ -106,8 +106,14 @@ export function Quiz({
     if (busy) return;
     if (timer.current) clearTimeout(timer.current);
     lock.current = false;
-    setIndex(0); setScore(0); setFeedback(null); setAnswerCorrect(null); setError(null);
-    setFinished(false); setSaved(false); setSelected(null);
+    setIndex(0);
+    setScore(0);
+    setFeedback(null);
+    setAnswerCorrect(null);
+    setError(null);
+    setFinished(false);
+    setSaved(false);
+    setSelected(null);
   };
   if (resource.loading) return <Loading />;
   if (resource.error && resource.status !== 404)
@@ -118,11 +124,42 @@ export function Quiz({
         <Label>لم تتم إضافة أسئلة لهذا النشاط بعد.</Label>
       </Card>
     );
-  if (finished) return <PositionResult score={score} total={questions.length} saved={saved} busy={busy} error={error} onRetry={() => void persist(score)} onNext={() => { if (saved && !busy && !error) router.replace(`/activity/${kind === 'position' ? 'tashkeel' : 'video'}?letterId=${letterId}&symbol=${encodeURIComponent(symbol)}`); }} />;
+  if (finished)
+    return (
+      <PositionResult
+        score={score}
+        total={questions.length}
+        saved={saved}
+        busy={busy}
+        error={error}
+        onRetry={() => void persist(score)}
+        onNext={() => {
+          if (saved && !busy && !error)
+            router.replace(
+              `/activity/${kind === "position" ? "tashkeel" : "video"}?letterId=${letterId}&symbol=${encodeURIComponent(symbol)}`,
+            );
+        }}
+      />
+    );
   return (
-    <View style={{ gap: 16, width: '100%', minWidth: 0 }}>
-      <Text style={{ fontFamily: 'Tajawal-Medium', fontSize: 20, lineHeight: 30, color: '#B47DDB', textAlign: 'right' }}>{kind === 'position' ? 'اختر المكان الصحيح للحرف في الكلمة' : 'اختر التشكيل الصحيح للحرف'}</Text>
-      <LinearGradient colors={['#FFE68C', '#FFB600']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+    <View style={{ gap: 16, width: "100%", minWidth: 0 }}>
+      <Text
+        style={{
+          fontFamily: "Tajawal-Medium",
+          fontSize: 20,
+          lineHeight: 30,
+          color: "#B47DDB",
+          textAlign: "right",
+        }}
+      >
+        {kind === "position"
+          ? "اختر المكان الصحيح للحرف في الكلمة"
+          : "اختر التشكيل الصحيح للحرف"}
+      </Text>
+      <LinearGradient
+        colors={["#FFE68C", "#FFB600"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         style={{
           flexDirection: "row-reverse",
           gap: 12,
@@ -130,20 +167,150 @@ export function Quiz({
           alignItems: "center",
           padding: 16,
           borderRadius: 24,
-          boxShadow: '0px 6px 16px #F7A82430',
+          boxShadow: "0px 6px 16px #F7A82430",
         }}
       >
-        <View style={{ alignItems: 'center', gap: 6, flexShrink: 1 }}>
-          {teacher ? <Pressable accessibilityRole="button" accessibilityLabel="الكلمة السابقة" disabled={index === 0} onPress={() => setIndex((n) => n - 1)} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', opacity: index === 0 ? 0.4 : 1 }}><Text style={{ fontSize: 28, color: colors.ink }}>‹</Text></Pressable> : <View style={{ backgroundColor: 'white', width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}><Image source={artwork.point} style={{ width: 30, height: 30 }} resizeMode="contain" /></View>}
-          <Text style={{ fontFamily: 'Tajawal-Bold', color: colors.ink, fontSize: 16 }}>{teacher ? 'السابق' : `النقاط ${score}`}</Text>
+        <View style={{ alignItems: "center", gap: 6, flexShrink: 1 }}>
+          {teacher ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="الكلمة السابقة"
+              disabled={index === 0}
+              onPress={() => setIndex((n) => n - 1)}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: index === 0 ? 0.4 : 1,
+              }}
+            >
+              <Text style={{ fontSize: 28, color: colors.ink }}>›</Text>
+            </Pressable>
+          ) : (
+            <View
+              style={{
+                backgroundColor: "white",
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={artwork.point}
+                style={{ width: 30, height: 30 }}
+                resizeMode="contain"
+              />
+            </View>
+          )}
+          <Text
+            style={{
+              fontFamily: "Tajawal-Bold",
+              color: colors.ink,
+              fontSize: 16,
+            }}
+          >
+            {teacher ? "السابق" : `النقاط ${score}`}
+          </Text>
         </View>
-        <View style={{ alignItems: 'center', flex: 1, minWidth: 0 }}><Text style={{ fontFamily: 'Tajawal-Bold', color: colors.ink, fontSize: 22 }}>السؤال</Text><Text style={{ fontFamily: 'Tajawal-Medium', color: colors.ink, fontSize: 20 }}>{index + 1} / {questions.length}</Text></View>
-        <View style={{ alignItems: 'center', gap: 6, flexShrink: 1 }}>
-          {teacher ? <Pressable accessibilityRole="button" accessibilityLabel="الكلمة التالية" disabled={index === questions.length - 1} onPress={() => setIndex((n) => n + 1)} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', opacity: index === questions.length - 1 ? 0.4 : 1 }}><Text style={{ fontSize: 28, color: colors.ink }}>›</Text></Pressable> : <Pressable accessibilityRole="button" accessibilityLabel="إعادة النشاط" disabled={busy} onPress={restart} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', opacity: busy ? 0.4 : 1 }}><Image source={artwork.quizRestart} resizeMode="contain" style={{ width: 28, height: 28 }} /></Pressable>}
-          <Text style={{ fontFamily: 'Tajawal-Bold', color: colors.ink, fontSize: 16 }}>{teacher ? 'التالي' : 'إعادة'}</Text>
+        <View style={{ alignItems: "center", flex: 1, minWidth: 0 }}>
+          <Text
+            style={{
+              fontFamily: "Tajawal-Bold",
+              color: colors.ink,
+              fontSize: 22,
+            }}
+          >
+            السؤال
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Tajawal-Medium",
+              color: colors.ink,
+              fontSize: 20,
+            }}
+          >
+            {index + 1} / {questions.length}
+          </Text>
+        </View>
+        <View style={{ alignItems: "center", gap: 6, flexShrink: 1 }}>
+          {teacher ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="الكلمة التالية"
+              disabled={index === questions.length - 1}
+              onPress={() => setIndex((n) => n + 1)}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: index === questions.length - 1 ? 0.4 : 1,
+              }}
+            >
+              <Text style={{ fontSize: 28, color: colors.ink }}>‹</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="إعادة النشاط"
+              disabled={busy}
+              onPress={restart}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: busy ? 0.4 : 1,
+              }}
+            >
+              <Image
+                source={artwork.quizRestart}
+                resizeMode="contain"
+                style={{ width: 28, height: 28 }}
+              />
+            </Pressable>
+          )}
+          <Text
+            style={{
+              fontFamily: "Tajawal-Bold",
+              color: colors.ink,
+              fontSize: 16,
+            }}
+          >
+            {teacher ? "التالي" : "إعادة"}
+          </Text>
         </View>
       </LinearGradient>
-      {kind === 'position' ? <PositionQuestion symbol={symbol} word={word} selected={selected} feedback={feedback ? answerCorrect ? 'correct' : 'wrong' : null} disabled={teacher || busy} teacher={teacher} onAnswer={(value) => void answer(value)} /> : <TashkeelQuestion symbol={symbol} word={word} selected={selected} feedback={feedback ? answerCorrect ? 'correct' : 'wrong' : null} disabled={teacher || busy} teacher={teacher} onAnswer={(value) => void answer(value)} />}
+      {kind === "position" ? (
+        <PositionQuestion
+          symbol={symbol}
+          word={word}
+          selected={selected}
+          feedback={feedback ? (answerCorrect ? "correct" : "wrong") : null}
+          disabled={teacher || busy}
+          teacher={teacher}
+          onAnswer={(value) => void answer(value)}
+        />
+      ) : (
+        <TashkeelQuestion
+          symbol={symbol}
+          word={word}
+          selected={selected}
+          feedback={feedback ? (answerCorrect ? "correct" : "wrong") : null}
+          disabled={teacher || busy}
+          teacher={teacher}
+          onAnswer={(value) => void answer(value)}
+        />
+      )}
       <Notice error={error} />
       {teacher && <Label>معاينة المعلم</Label>}
     </View>

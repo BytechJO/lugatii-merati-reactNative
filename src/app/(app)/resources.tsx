@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Redirect, router } from "expo-router";
 import { Image, Linking, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { VerticalScrollView as ScrollView, type VerticalScrollViewRef } from '../../components/VerticalScrollView';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HeaderSafeAreaView as SafeAreaView } from "../../components/HeaderSafeAreaView";
 import { useSession } from "../../core/session";
 import { Notice } from "../../components/ui";
 import { TeacherHero } from "../../components/TeacherHero";
@@ -66,13 +66,14 @@ export default function ResourcesScreen() {
   };
   if (session?.user.role !== "teacher") return <Redirect href="/home" />;
   return (
-    <SafeAreaView style={styles.page}>
-      <ScrollView ref={scroll} contentContainerStyle={styles.scroll}>
+    <SafeAreaView style={styles.page} edges={["left", "right", "bottom"]}>
+      
         <TeacherHero
           title={selected?.headerTitle ?? "موارد المعلم"}
           subtitle={selected?.title ?? "رحلة تعليم اللغة العربية تبدأ هنا"}
           onBack={back}
         />
+      <ScrollView ref={scroll} contentContainerStyle={styles.scroll}>
         <View style={styles.main}>
           <Notice error={error} />
           {!library ? (

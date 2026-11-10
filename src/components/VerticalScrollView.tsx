@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import {
   ScrollView as NativeScrollView,
   type ScrollViewProps,
+  type ScrollViewInstance,
 } from "react-native";
 
 type Props = Omit<
@@ -11,10 +12,10 @@ type Props = Omit<
   | "showsHorizontalScrollIndicator"
   | "directionalLockEnabled"
 >;
-export type VerticalScrollViewRef = NativeScrollView;
+export type VerticalScrollViewRef = ScrollViewInstance;
 
 // App screens scroll vertically only; children must adapt to the available width.
-export const VerticalScrollView = forwardRef<NativeScrollView, Props>(
+export const VerticalScrollView = forwardRef<ScrollViewInstance, Props>(
   function VerticalScrollView({ style, contentContainerStyle, ...props }, ref) {
     return (
       <NativeScrollView

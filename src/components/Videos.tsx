@@ -17,7 +17,8 @@ import { useSession } from "../core/session";
 import { errorMessage, saveProgress } from "../core/api";
 import { artwork } from "../data/design";
 type Video = {
-  id: number;
+  video_id?: number;
+  id?: number;
   title?: string;
   video_title?: string;
   description?: string;
@@ -65,9 +66,9 @@ export function Videos({ letterId }: { letterId: number }) {
           gap: 20,
         }}
       >
-        {resource.data?.data.map((video) => (
+        {resource.data?.data.map((video, index) => (
           <Pressable
-            key={video.id}
+            key={video.video_id ?? video.id ?? `${video.youtube_url}:${index}`}
             accessibilityRole="button"
             accessibilityLabel={`شغّل ${video.video_title || video.title || "الفيديو"}`}
             onPress={() => setActive(video)}
@@ -199,7 +200,7 @@ export function Videos({ letterId }: { letterId: number }) {
                   {active.video_title || active.title || "شاهد وتعلم"}
                 </Text>
                 <LessonVideo
-                  key={active.id}
+                  key={active.video_id ?? active.id ?? active.youtube_url}
                   uri={active.youtube_url}
                   showHint={false}
                   onEnded={() => void complete()}
