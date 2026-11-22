@@ -18,7 +18,10 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.lugati.mirati"
+      "package": "com.lugati.mirati",
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,6 +41,16 @@
       "expo-asset",
       "expo-font"
     ],
-    "scheme": "lugati"
+    "scheme": "lugati",
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "3b547c03-de0f-481e-8d5e-f2b43de79ab1"
+      }
+    }
   }
 }

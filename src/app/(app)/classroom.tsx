@@ -13,7 +13,6 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { artwork } from "../../data/design";
 export default function ClassroomScreen() {
   if (useSession().session?.user.role === "teacher")
@@ -45,7 +44,7 @@ function StudentClassroom() {
   };
   const joined = resource.data?.data;
   return (
-    <Page title="" headerVariant="transparent" background={artwork.successBackground}>
+    <Page title="انضم إلى صفك" headerVariant="transparent" background={artwork.successBackground}>
       {resource.loading ? (
         <Loading />
       ) : resource.error ? (
@@ -53,19 +52,15 @@ function StudentClassroom() {
       ) : joined ? (
         <ClassroomWelcome name={joined.name} />
       ) : (
-        <LinearGradient colors={["#A68BB7", "#84639B"]} style={styles.join}>
-          {width >= 768 && (
-            <Image
-              source={artwork.classroomTiger}
-              resizeMode="contain"
-              style={{ height: 220, width: 220 }}
-            />
-          )}
-          <View style={{ flex: 1, gap: 22 }}>
-            <Text style={[styles.title, { color: "white" }]}>
-              إستعد لمغامرة تعليمية رائعة
-            </Text>
-            <Text style={[styles.subtitle, { color: "white" }]}>
+        <View style={[styles.join, width >= 768 && styles.joinWide]}>
+          <View style={styles.card}>
+            <View style={styles.cardAccent} />
+            <View style={styles.heading}>
+              <View style={styles.dot} />
+              <Text style={styles.title}>إستعد لمغامرة تعليمية رائعة</Text>
+              <View style={styles.dot} />
+            </View>
+            <Text style={styles.subtitle}>
               أدخل كود الصف الذي قدمه لك المعلم
             </Text>
             <Field
@@ -75,46 +70,124 @@ function StudentClassroom() {
               maxLength={6}
               placeholder="مثال: ABC123"
               accessibilityLabel="كود الصف"
-              style={{
-                backgroundColor: "#FFFFFF6B",
-                borderWidth: 0,
-                color: "white",
-              }}
+              style={styles.codeField}
             />
             <Notice error={error} />
             <Button
-              label={busy ? "جارٍ الانضمام…" : "تسجيل"}
+              label={busy ? "جارٍ الانضمام…" : "انضم إلى الصف"}
               secondary
               disabled={busy || !code.trim()}
               onPress={() => void join()}
             />
-            <Text style={[styles.subtitle, { color: "white", fontSize: 16 }]}>
-              ملاحظة: اطلب من معلمك كود الصف للانضمام إلى صفه الدراسي
-            </Text>
+            <View style={styles.note}>
+              <Image source={artwork.star} resizeMode="contain" style={styles.noteIcon} />
+              <Text style={styles.noteText}>
+                ملاحظة: اطلب من معلمك كود الصف للانضمام إلى صفه الدراسي
+              </Text>
+            </View>
           </View>
-        </LinearGradient>
+          {width >= 768 && (
+            <Image
+              source={artwork.classroomTiger}
+              resizeMode="contain"
+              style={styles.tiger}
+            />
+          )}
+        </View>
       )}
     </Page>
   );
 }
 const styles = StyleSheet.create({
+  join: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 28,
+    paddingVertical: 12,
+  },
+  joinWide: { flexDirection: "row-reverse" },
+  card: {
+    width: "100%",
+    maxWidth: 470,
+    minWidth: 0,
+    overflow: "hidden",
+    gap: 18,
+    padding: 28,
+    borderRadius: 28,
+    backgroundColor: "#FFFFFFF2",
+    borderWidth: 1,
+    borderColor: "#FFFFFF",
+    shadowColor: "#652B82",
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.18,
+    shadowRadius: 22,
+    elevation: 7,
+  },
+  cardAccent: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 130,
+    height: 54,
+    borderBottomLeftRadius: 42,
+    backgroundColor: "#FDC333",
+  },
+  heading: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 9,
+    paddingTop: 6,
+  },
   title: {
-    fontFamily: "Cairo",
-    fontSize: 28,
-    color: "#570A92",
+    flexShrink: 1,
+    fontFamily: "Tajawal-Bold",
+    fontSize: 27,
+    color: "#652B82",
     textAlign: "center",
   },
   subtitle: {
     fontFamily: "Tajawal-Medium",
-    color: "#A664D3",
-    fontSize: 20,
+    color: "#625777",
+    fontSize: 18,
+    lineHeight: 28,
     textAlign: "center",
   },
-  join: {
-    padding: 28,
-    borderRadius: 28,
-    gap: 24,
-    flexDirection: "column",
-    alignItems: "center",
+  dot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#FDC333",
   },
+  codeField: {
+    minHeight: 58,
+    borderWidth: 2,
+    borderColor: "#E0D0ED",
+    borderRadius: 16,
+    backgroundColor: "#F8F5FB",
+    color: "#652B82",
+    fontFamily: "Tajawal-Bold",
+    fontSize: 22,
+    letterSpacing: 3,
+    textAlign: "center",
+    writingDirection: "ltr",
+  },
+  note: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 7,
+    paddingHorizontal: 4,
+  },
+  noteIcon: { width: 18, height: 18 },
+  noteText: {
+    flexShrink: 1,
+    color: "#625777",
+    fontFamily: "Tajawal",
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: "center",
+  },
+  tiger: { width: 230, height: 260 },
 });
